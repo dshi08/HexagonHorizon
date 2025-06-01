@@ -4,19 +4,18 @@ using UnityEngine;
 
 public class Cannonball : MonoBehaviour
 {
-    public void Shoot(Vector3 startPos, Vector3 endPos)
+    public void Shoot(Vector3 startPos, Vector3 endPos, float duration = 0.5f)
     {
-        StartCoroutine(MoveCannonball(startPos, endPos));
+        StartCoroutine(MoveCannonball(startPos, endPos, duration));
     }
 
-    private IEnumerator MoveCannonball(Vector3 startPos, Vector3 endPos)
+    private IEnumerator MoveCannonball(Vector3 startPos, Vector3 endPos, float duration)
     {
-        float moveDuration = 0.5f; // Duration of the cannonball's flight
         float elapsedTime = 0f;
 
-        while (elapsedTime < moveDuration)
+        while (elapsedTime < duration)
         {
-            float t = elapsedTime / moveDuration;
+            float t = elapsedTime / duration;
             float height = Mathf.Sin(t * Mathf.PI) * 0.3f; // Arc height
             transform.position = Vector3.Lerp(startPos, endPos, t) + Vector3.up * height;
             elapsedTime += Time.deltaTime;
