@@ -6,11 +6,12 @@ public class Health : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth;
 
-    public Image healthBarImage; // Assign this in the Inspector
+    private Slider slider;
 
     void Start()
     {
         currentHealth = maxHealth;
+        slider = GetComponent<Slider>();
         UpdateHealthBar();
     }
 
@@ -19,11 +20,6 @@ public class Health : MonoBehaviour
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         UpdateHealthBar();
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
     }
 
     public void Heal(float amount)
@@ -35,16 +31,6 @@ public class Health : MonoBehaviour
 
     void UpdateHealthBar()
     {
-        if (healthBarImage != null)
-        {
-            healthBarImage.fillAmount = currentHealth / maxHealth;
-        }
-    }
-
-    void Die()
-    {
-        Debug.Log(gameObject.name + " died!");
-        // You can destroy or disable the object
-        Destroy(gameObject);
+        slider.value = currentHealth;
     }
 }

@@ -11,6 +11,8 @@ public class EnemyManager : MonoBehaviour
     public GameObject gridManagerObject;
     private GridManager gridManager;
     public GameObject player;
+    public GameObject healthBar;
+    private Health playerHealth;
     public int enemyCount = 5;
     private List<EnemyMovement> enemies = new List<EnemyMovement>();
     private HexPos playerHex;
@@ -19,6 +21,7 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         playerHex = player.GetComponent<HexPos>();
+        playerHealth = healthBar.GetComponent<Health>();
         gridManager = gridManagerObject.GetComponent<GridManager>();
         SpawnEnemies();
     }
@@ -47,6 +50,7 @@ public class EnemyManager : MonoBehaviour
             enemyObj.transform.position = hexPos.position;
 
             EnemyMovement enemy = enemyObj.GetComponent<EnemyMovement>();
+            enemy.playerHealth = playerHealth;
             enemy.gridManager = gridManager;
             enemies.Add(enemy);
         }

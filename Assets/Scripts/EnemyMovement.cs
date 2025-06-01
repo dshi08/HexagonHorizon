@@ -8,6 +8,7 @@ public class EnemyMovement : MonoBehaviour
     public HexPos hexPos;
     public float moveDuration = 0.5f; // Match player's movement speed
     public float arcHeight = 0.3f;    // Slightly lower arc than player for visual distinction
+    public Health playerHealth;
 
     void Start()
     {
@@ -50,6 +51,14 @@ public class EnemyMovement : MonoBehaviour
         Vector2Int bestMove = hexPos.GetPos();
         int minDistance = int.MaxValue;
 
+        if(HexDistance(hexPos.GetPos(), playerHex.GetPos()) <= 1)
+        {
+            // Attack the player
+            gameObject.SetActive(true);
+            playerHealth.TakeDamage(10);
+            return;
+        }
+
         foreach (Vector2Int neighbor in neighbors)
         {
             int dist = HexDistance(neighbor, playerHex.GetPos());
@@ -60,9 +69,9 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        bool canSee = minDistance <= 1;
+        bool adjacent = minDistance <= 1;
         // set visibility
-        gameObject.SetActive(canSee);
+        gameObject.SetActive(adjacent);
 
         MoveToHex(bestMove.x, bestMove.y);
     }
