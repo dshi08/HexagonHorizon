@@ -10,10 +10,6 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         hexPos = GetComponent<HexPos>();
-        if (hexPos == null)
-        {
-            Debug.LogError("HexPos component missing!");
-        }
     }
 
     // Public method to move enemy to axial coordinates (q, r)

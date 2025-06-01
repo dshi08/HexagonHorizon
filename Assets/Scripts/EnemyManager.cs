@@ -1,115 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UE = UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    [Header("Stats")]
-    public int maxHealth = 100;
-    [SerializeField] private int _currentHealth;
-    // public int damage = 15;
-    // public float moveSpeed = 3f;
-    // public float attackRange = 1.5f;
-    // public int scoreValue = 100;
+    public GameObject enemyPrefab;
+    public GameObject player;
+    public int enemyCount = 5;
+    private List<EnemyMovement> enemies = new List<EnemyMovement>();
+    private HexPos playerHex;
 
-    [Header("References")]
-    public Transform player;
-    // public GameObject deathEffect;
-    private EnemyMovement _enemyMovement;
-    // private Animator _animator;
-    
-
-    [Header("States")]
-    public bool isDead = false;
-    public bool canAttack = true;
-    public float attackCooldown = 2f;
-
-    // public delegate void EnemyEvent(EnemyManager enemy);
-    // public static event EnemyEvent OnEnemyDeath;
-
-    void Awake()
+    void Start()
     {
-        _currentHealth = maxHealth;
-        _enemyMovement = GetComponent<EnemyMovement>();
-        // _animator = GetComponent<Animator>();
-        
-        if (player == null)
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+        SpawnEnemies();
+        playerHex = player.GetComponent<HexPos>();
     }
 
-    void Update()
+    public void Move()
     {
-        if (isDead) return;
-
-        HandleAIBehavior();
-    }
-
-    public void TakeDamage(int damageAmount)
-    {
-        _currentHealth -= damageAmount;
-        // _animator?.SetTrigger("Hurt");
-
-        if (_currentHealth <= 0)
+        foreach (EnemyMovement enemy in enemies)
         {
-            Die();
+            enemy.ChasePlayer(playerHex);
         }
     }
 
-    private void Die()
+    void SpawnEnemies()
     {
-        isDead = true;
-        // _animator?.SetTrigger("Die");
-        
-        // Disable components
-        // if (TryGetComponent<Collider>(out var collider))
-        //     collider.enabled = false;
-        
-        // _enemyMovement?.StopMovement();
-
-        // Notify listeners (exp stuff)
-        // OnEnemyDeath?.Invoke(this);
-
-        // Visual/audio effects
-        // Instantiate(deathEffect, transform.position, Quaternion.identity);
-        // Destroy(gameObject, 2f); // Delay for death animation
-    }
-    private void HandleAIBehavior()
-    {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        // if (distanceToPlayer <= attackRange && canAttack)
+        for (int i = 0; i < enemyCount; i++)
         {
-            // StartCoroutine(AttackPlayer());
+            GameObject enemyObj = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            HexPos hexPos = enemyObj.GetComponent<HexPos>();
+            int q = UE.Random.Range(-5, 5);
+            int magnitude = 5 - Math.Abs(q);
+            int r = UE.Random.Range(-magnitude, magnitude);
+            hexPos.SetPos(q, r);
+            enemyObj.transform.position = hexPos.position;
+            enemies.Add(enemyObj.GetComponent<EnemyMovement>());
         }
-        // else if (distanceToPlayer > attackRange)
-        {
-            // _enemyMovement?.MoveToward(player.position);
-        }
-    }
-
-    // IEnumerator AttackPlayer()
-    // {
-    //     canAttack = false;
-    //     // _animator?.SetTrigger("Attack");
-        
-    //     // Damage logic (called via animation event)
-    //     // yield return new WaitForSeconds(attackCooldown);
-    //     // canAttack = true;
-    // }
-
-    // Called from animation event
-    public void DealDamage()
-    {
-        // if (Vector3.Distance(transform.position, player.position) <= attackRange)
-        // {
-        //     player.GetComponent<PlayerHealth>().TakeDamage(damage);
-        // }
-    }
-
-    // ========== DEBUG ==========
-    void OnDrawGizmosSelected()
-    {
-        // Gizmos.color = Color.red;
-        // Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }

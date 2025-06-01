@@ -12,11 +12,14 @@ public class GridManager : MonoBehaviour
     private Dictionary<string, GameObject> hexes = new Dictionary<string, GameObject>();
 
     private HashSet<string> currentlyRevealedHexKeys = new HashSet<string>();
+    public GameObject enemyManagerObject;
+    private EnemyManager enemyManager;
 
     void Start()
     {
         GenerateHexagonalGrid(size);
         Reveal(0, 0, 1);
+        enemyManager = enemyManagerObject.GetComponent<EnemyManager>();
     }
 
     void Update()
@@ -32,7 +35,8 @@ public class GridManager : MonoBehaviour
                 
                 if (hex != null)
                 {
-                    player.GetComponent<PlayerMovement>()?.MoveToPos(hex.q, hex.r);
+                    player.GetComponent<PlayerMovement>().MoveToPos(hex.q, hex.r);
+                    enemyManager.Move();
                     Reveal(hex.q, hex.r, 1);
                 }
                 else
