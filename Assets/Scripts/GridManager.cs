@@ -12,7 +12,7 @@ public class GridManager : MonoBehaviour
     public GameObject player;
     private PlayerMovement playerMovement;
     private AttackManager attackManager;
-    private Dictionary<string, GameObject> hexes = new Dictionary<string, GameObject>();
+    public Dictionary<string, GameObject> hexes = new Dictionary<string, GameObject>();
     private Dictionary<string, bool> occupiedHexes = new Dictionary<string, bool>();
     private HashSet<string> currentlyRevealedHexKeys = new HashSet<string>();
     public GameObject enemyManagerObject;
