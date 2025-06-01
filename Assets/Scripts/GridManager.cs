@@ -7,7 +7,7 @@ public class GridManager : MonoBehaviour
 {
     public GameObject hexagon;
     public int size = 5;
-    private float hexSize = 0.8f;
+    private float hexSize = 0.85f;
     public GameObject player;
     private PlayerMovement playerMovement;
     private AttackManager attackManager;
@@ -53,9 +53,9 @@ public class GridManager : MonoBehaviour
     void HandleMove(HexPos hex)
     {
         attackManager.Attack(playerMovement.currentHex.GetPos(), hex.GetPos(), 0);
-        // playerMovement.MoveToPos(hex.q, hex.r);
+        playerMovement.MoveToPos(hex.q, hex.r);
         enemyManager.Move();
-        // Reveal(hex.q, hex.r, 1);
+        Reveal(hex.q, hex.r, 1);
     }
 
     void Reveal(int centerQ, int centerR, int radius)

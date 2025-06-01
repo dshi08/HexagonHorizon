@@ -29,22 +29,24 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator MoveToPosition(Vector3 targetPosition)
     {
+        // face towards where we're going
+        Vector3 direction = targetPosition - transform.position;
+        transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+
         Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
-        float duration = 1f; // Duration of the movement
+        float duration = 0.5f; // Duration of the movement
 
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;
             // Use a quadratic curve for the arc
-            float height = Mathf.Sin(t * Mathf.PI) * 0.5f; // Adjust height as needed
+            float height = Mathf.Sin(t * Mathf.PI) * -0.25f; // Adjust height as needed
             transform.position = Vector3.Lerp(startPosition, targetPosition, t) + new Vector3(0, height, 0);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         transform.position = targetPosition; // Ensure final position is set
-
     }
-    
 }
