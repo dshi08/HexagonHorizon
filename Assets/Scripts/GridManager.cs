@@ -71,11 +71,8 @@ public class GridManager : MonoBehaviour
             if (hexes.TryGetValue(key, out GameObject hexObj))
             {
                 Animator anim = hexObj.GetComponent<Animator>();
-                if (anim != null)
-                {
-                    anim.SetBool("isRevealed", false);
-                }
-                hexObj.transform.rotation = Quaternion.Euler(0, 90, 0);
+                anim.SetBool("Flipped", false);
+                // hexObj.transform.rotation = Quaternion.Euler(0, 90, 0);
             }
             currentlyRevealedHexKeys.Remove(key);
         }
@@ -89,11 +86,8 @@ public class GridManager : MonoBehaviour
             if (hexes.TryGetValue(key, out GameObject hexObj))
             {
                 Animator anim = hexObj.GetComponent<Animator>();
-                if (anim != null)
-                {
-                    anim.SetBool("isRevealed", true);
-                }
-                hexObj.transform.rotation = Quaternion.Euler(180, 90, 0);
+                anim.SetBool("Flipped", true);
+                // hexObj.transform.rotation = Quaternion.Euler(180, 90, 0);
                 currentlyRevealedHexKeys.Add(key);
             }
         }
@@ -129,10 +123,7 @@ public class GridManager : MonoBehaviour
 
                 // Initialize animation state
                 Animator anim = hexObj.GetComponent<Animator>();
-                if (anim != null)
-                {
-                    anim.SetBool("isRevealed", false);
-                }
+                anim.SetBool("Flipped", false);
             }
         }
     }
