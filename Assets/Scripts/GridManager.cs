@@ -1,4 +1,5 @@
 // GridManager.cs
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class GridManager : MonoBehaviour
     private HashSet<string> currentlyRevealedHexKeys = new HashSet<string>();
     public GameObject enemyManagerObject;
     private EnemyManager enemyManager;
+    public int? currentAttackIndex = null;
     public int revealRadius = 1;
 
     void Start()
@@ -52,16 +54,31 @@ public class GridManager : MonoBehaviour
 
     void HandleMove(HexPos hex)
     {
-        if (IsHexAvailable(hex.q, hex.r))
+        if (currentAttackIndex == null) return;
+
+        int dQ = playerMovement.currentHex.q - hex.q;
+        int dR = playerMovement.currentHex.r - hex.r;
+        bool isAdjacent = Math.Abs(dQ) <= 1 && Math.Abs(dR) <= 1 && Math.Abs(dQ + dR) <= 1 && !(dQ == 0 && dR == 0);
+        if (currentAttackIndex == -1)
         {
+            // We want to move
+            if (!IsHexAvailable(hex.q, hex.r) || !isAdjacent) return;
+
             playerMovement.MoveToPos(hex.q, hex.r);
             Reveal(hex.q, hex.r, 1);
         }
         else
         {
-            attackManager.Attack(playerMovement.currentHex.GetPos(), hex.GetPos(), 1);
+            if (currentAttackIndex == 0 && !isAdjacent) return;
+            attackManager.Attack(playerMovement.currentHex.GetPos(), hex.GetPos(), currentAttackIndex.Value);
+            if (currentAttackIndex == 0) // Ram
+            {
+                playerMovement.MoveToPos(hex.q, hex.r);
+                Reveal(hex.q, hex.r, 1);
+            }
         }
 
+        currentAttackIndex = null;
         Invoke("MoveEnemies", 0.5f); // Delay enemy movement to allow player action to complete
     }
 
