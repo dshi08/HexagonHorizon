@@ -1,4 +1,4 @@
-using System;
+// GridManager.cs
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +11,8 @@ public class GridManager : MonoBehaviour
     public GameObject player;
     private Dictionary<string, GameObject> hexes = new Dictionary<string, GameObject>();
 
-    // Start is called before the first frame update
+    private HashSet<string> currentlyRevealedHexKeys = new HashSet<string>();
+
     void Start()
     {
         GenerateHexagonalGrid(size);
@@ -20,7 +21,6 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
-        // get which hexagon is clicked
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -29,25 +29,72 @@ public class GridManager : MonoBehaviour
             {
                 GameObject clickedHex = hit.collider.gameObject;
                 HexPos hex = clickedHex.GetComponent<HexPos>();
-                player.GetComponent<PlayerMovement>().MoveToPos(hex.q, hex.r);
-                Reveal(hex.q, hex.r, 1);
+                
+                if (hex != null)
+                {
+                    player.GetComponent<PlayerMovement>()?.MoveToPos(hex.q, hex.r);
+                    Reveal(hex.q, hex.r, 1);
+                }
+                else
+                {
+                    Debug.LogWarning("Clicked object '" + clickedHex.name + "' does not have a HexPos component or is not a hex.");
+                }
             }
         }
     }
 
     void Reveal(int centerQ, int centerR, int radius)
     {
-        // Rotate the hexagons 180 degrees around the x axis
+        HashSet<string> hexesToRevealThisTurn = new HashSet<string>();
+
+        // Calculate which hexes should be revealed
         for (int q = -radius; q <= radius; q++)
         {
             int r1 = Mathf.Max(-radius, -q - radius);
             int r2 = Mathf.Min(radius, -q + radius);
             for (int r = r1; r <= r2; r++)
             {
-                if (hexes.TryGetValue($"{centerQ + q},{centerR + r}", out GameObject hexObj))
+                string key = $"{centerQ + q},{centerR + r}";
+                if (hexes.ContainsKey(key))
                 {
-                    hexObj.transform.rotation = Quaternion.Euler(180, 90, 0);
+                    hexesToRevealThisTurn.Add(key);
                 }
+            }
+        }
+
+        // Hide hexes that should no longer be revealed
+        HashSet<string> hexesToHide = new HashSet<string>(currentlyRevealedHexKeys);
+        hexesToHide.ExceptWith(hexesToRevealThisTurn);
+        
+        foreach (string key in hexesToHide)
+        {
+            if (hexes.TryGetValue(key, out GameObject hexObj))
+            {
+                Animator anim = hexObj.GetComponent<Animator>();
+                if (anim != null)
+                {
+                    anim.SetBool("isRevealed", false);
+                }
+                hexObj.transform.rotation = Quaternion.Euler(0, 90, 0);
+            }
+            currentlyRevealedHexKeys.Remove(key);
+        }
+
+        // Reveal only the new hexes
+        HashSet<string> hexesToShow = new HashSet<string>(hexesToRevealThisTurn);
+        hexesToShow.ExceptWith(currentlyRevealedHexKeys);
+        
+        foreach (string key in hexesToShow)
+        {
+            if (hexes.TryGetValue(key, out GameObject hexObj))
+            {
+                Animator anim = hexObj.GetComponent<Animator>();
+                if (anim != null)
+                {
+                    anim.SetBool("isRevealed", true);
+                }
+                hexObj.transform.rotation = Quaternion.Euler(180, 90, 0);
+                currentlyRevealedHexKeys.Add(key);
             }
         }
     }
@@ -60,14 +107,32 @@ public class GridManager : MonoBehaviour
             int r2 = Mathf.Min(size, -q + size);
             for (int r = r1; r <= r2; r++)
             {
-                // rotate 90 degrees around the Y-axis
+                // Create hex with initial rotation (matches reference code)
                 GameObject hexObj = Instantiate(hexagon, transform.position, Quaternion.Euler(0, 90, 0));
                 hexes[$"{q},{r}"] = hexObj;
+                
+                // Apply scaling using localScale (matches reference code)
                 hexObj.transform.localScale = new Vector3(hexSize, hexSize, hexSize);
-                HexPos pos = hexObj.AddComponent<HexPos>();
+                
+                // Add HexPos component and set coordinates
+                HexPos pos = hexObj.GetComponent<HexPos>();
+                if (pos == null)
+                {
+                    pos = hexObj.AddComponent<HexPos>();
+                }
                 pos.q = q;
                 pos.r = r;
+                
+                // Position hex using HexPos.position property (matches reference code)
                 hexObj.transform.position = pos.position;
+                hexObj.name = $"Hex_{q},{r}";
+
+                // Initialize animation state
+                Animator anim = hexObj.GetComponent<Animator>();
+                if (anim != null)
+                {
+                    anim.SetBool("isRevealed", false);
+                }
             }
         }
     }
