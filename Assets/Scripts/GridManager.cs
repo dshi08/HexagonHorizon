@@ -9,6 +9,8 @@ public class GridManager : MonoBehaviour
     public int size = 5;
     private float hexSize = 0.8f;
     public GameObject player;
+    private PlayerMovement playerMovement;
+    private AttackManager attackManager;
     private Dictionary<string, GameObject> hexes = new Dictionary<string, GameObject>();
     private Dictionary<string, bool> occupiedHexes = new Dictionary<string, bool>();
     private HashSet<string> currentlyRevealedHexKeys = new HashSet<string>();
@@ -20,6 +22,8 @@ public class GridManager : MonoBehaviour
         GenerateHexagonalGrid(size);
         Reveal(0, 0, 1);
         enemyManager = enemyManagerObject.GetComponent<EnemyManager>();
+        attackManager = player.GetComponent<AttackManager>();
+        playerMovement = player.GetComponent<PlayerMovement>();
     }
 
     void Update()
@@ -35,7 +39,7 @@ public class GridManager : MonoBehaviour
 
                 if (hex != null)
                 {
-                    if (!IsHexAvailable(hex.q, hex.r)) return;
+                    // if (!IsHexAvailable(hex.q, hex.r)) return;
                     HandleMove(hex);
                 }
                 else
@@ -48,9 +52,10 @@ public class GridManager : MonoBehaviour
 
     void HandleMove(HexPos hex)
     {
-        player.GetComponent<PlayerMovement>().MoveToPos(hex.q, hex.r);
+        attackManager.Attack(playerMovement.currentHex.GetPos(), hex.GetPos(), 0);
+        // playerMovement.MoveToPos(hex.q, hex.r);
         enemyManager.Move();
-        Reveal(hex.q, hex.r, 1);
+        // Reveal(hex.q, hex.r, 1);
     }
 
     void Reveal(int centerQ, int centerR, int radius)

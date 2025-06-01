@@ -1,8 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 public abstract class AttackBase : MonoBehaviour
 {
-    public abstract void Execute();
-    public abstract KeyCode hotkey { get; }
-    public abstract string attackName { get; }
+    public abstract List<Vector2> GetHitTiles(Vector2 origin, Vector2 target);
     public abstract int damage { get; }
 }

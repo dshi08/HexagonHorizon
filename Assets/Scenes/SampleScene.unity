@@ -935,6 +935,8 @@ GameObject:
   - component: {fileID: 1287356366}
   - component: {fileID: 1287356371}
   - component: {fileID: 1287356370}
+  - component: {fileID: 1287356373}
+  - component: {fileID: 1287356372}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1057,6 +1059,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManagerObject: {fileID: 990597255}
+  currentHex: {fileID: 0}
+--- !u!114 &1287356372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287356365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80e06333f9cea144fa85a0240edb5a0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1287356373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287356365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3afbb078b01cf4a3a977bb1516123ffa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacks:
+  - {fileID: 1287356372}
 --- !u!1 &1493308786
 GameObject:
   m_ObjectHideFlags: 0

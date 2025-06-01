@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public GameObject gridManagerObject;
     private GridManager gridManager;
-    private HexPos currentHex;
+    public HexPos currentHex;
 
     // Start is called before the first frame update
     void Start()
