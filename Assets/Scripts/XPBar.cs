@@ -22,14 +22,14 @@ public class PlayerXP : MonoBehaviour
             LevelUp();
         }
         UpdateXPBar();
-        GetComponent<PlayerXP>().GainXP(25);
     }
 
     void LevelUp()
     {
         currentXP -= xpToNextLevel;
         level++;
-        xpToNextLevel += 50; // Optional: Make each level require more XP
+        xpToNextLevel += 50; 
+        FindObjectOfType<GridManager>().IncreaseRevealRadius();
     }
 
     void UpdateXPBar()

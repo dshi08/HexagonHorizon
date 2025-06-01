@@ -16,6 +16,7 @@ public class GridManager : MonoBehaviour
     private HashSet<string> currentlyRevealedHexKeys = new HashSet<string>();
     public GameObject enemyManagerObject;
     private EnemyManager enemyManager;
+    public int revealRadius = 1;
 
     void Start()
     {
@@ -168,5 +169,12 @@ public class GridManager : MonoBehaviour
     public bool IsHexAvailable(int q, int r)
     {
         return !occupiedHexes.ContainsKey($"{q},{r}") || !occupiedHexes[$"{q},{r}"];
+    }
+
+    public void IncreaseRevealRadius()
+    {
+        revealRadius++;
+        HexPos playerPos = player.GetComponent<PlayerMovement>().currentHex;
+        Reveal(playerPos.q, playerPos.r, revealRadius);
     }
 }
