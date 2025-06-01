@@ -19,14 +19,14 @@ public class EnemyMovement : MonoBehaviour
     {
         gridManager.LeaveHex(hexPos.q, hexPos.r);
         gridManager.EnterHex(q, r);
+        Vector3 startPos = hexPos.position;
         hexPos.SetPos(q, r);
-        StartCoroutine(MoveToPosition(hexPos.position));
+        StartCoroutine(MoveToPosition(startPos, hexPos.position));
     }
 
     // Smooth arc movement (identical to player's style)
-    private IEnumerator MoveToPosition(Vector3 targetPosition)
+    private IEnumerator MoveToPosition(Vector3 startPosition, Vector3 targetPosition)
     {
-        Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
 
         while (elapsedTime < moveDuration)
@@ -60,7 +60,7 @@ public class EnemyMovement : MonoBehaviour
 
         bool canSee = minDistance <= 1;
         // set visibility
-        GetComponent<MeshRenderer>().enabled = canSee;
+        gameObject.SetActive(canSee);
 
         MoveToHex(bestMove.x, bestMove.y);
     }
