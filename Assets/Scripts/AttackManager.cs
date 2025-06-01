@@ -12,9 +12,9 @@ public class AttackManager : MonoBehaviour
     void Start()
     {
         enemyManager = enemyManagerObject.GetComponent<EnemyManager>();
-	}
+    }
 
-	public void Attack(Vector2 origin, Vector2 target, int attackIndex)
+    public void Attack(Vector2 origin, Vector2 target, int attackIndex)
     {
         AttackBase attack = attacks[attackIndex];
         List<Vector2> hitTiles = attack.HitTiles(origin, target);
