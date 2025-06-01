@@ -38,5 +38,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         transform.position = targetPosition; // Ensure final position is set
+
     }
+    
 }
