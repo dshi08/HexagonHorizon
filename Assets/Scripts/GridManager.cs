@@ -10,7 +10,7 @@ public class GridManager : MonoBehaviour
     private float hexSize = 0.8f;
     public GameObject player;
     private Dictionary<string, GameObject> hexes = new Dictionary<string, GameObject>();
-
+    private Dictionary<string, bool> occupiedHexes = new Dictionary<string, bool>();
     private HashSet<string> currentlyRevealedHexKeys = new HashSet<string>();
     public GameObject enemyManagerObject;
     private EnemyManager enemyManager;
@@ -32,12 +32,11 @@ public class GridManager : MonoBehaviour
             {
                 GameObject clickedHex = hit.collider.gameObject;
                 HexPos hex = clickedHex.GetComponent<HexPos>();
-                
+
                 if (hex != null)
                 {
-                    player.GetComponent<PlayerMovement>().MoveToPos(hex.q, hex.r);
-                    enemyManager.Move();
-                    Reveal(hex.q, hex.r, 1);
+                    if (!IsHexAvailable(hex.q, hex.r)) return;
+                    HandleMove(hex);
                 }
                 else
                 {
@@ -45,6 +44,13 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void HandleMove(HexPos hex)
+    {
+        player.GetComponent<PlayerMovement>().MoveToPos(hex.q, hex.r);
+        enemyManager.Move();
+        Reveal(hex.q, hex.r, 1);
     }
 
     void Reveal(int centerQ, int centerR, int radius)
@@ -69,7 +75,7 @@ public class GridManager : MonoBehaviour
         // Hide hexes that should no longer be revealed
         HashSet<string> hexesToHide = new HashSet<string>(currentlyRevealedHexKeys);
         hexesToHide.ExceptWith(hexesToRevealThisTurn);
-        
+
         foreach (string key in hexesToHide)
         {
             if (hexes.TryGetValue(key, out GameObject hexObj))
@@ -84,7 +90,7 @@ public class GridManager : MonoBehaviour
         // Reveal only the new hexes
         HashSet<string> hexesToShow = new HashSet<string>(hexesToRevealThisTurn);
         hexesToShow.ExceptWith(currentlyRevealedHexKeys);
-        
+
         foreach (string key in hexesToShow)
         {
             if (hexes.TryGetValue(key, out GameObject hexObj))
@@ -108,10 +114,11 @@ public class GridManager : MonoBehaviour
                 // Create hex with initial rotation (matches reference code)
                 GameObject hexObj = Instantiate(hexagon, transform.position, Quaternion.Euler(0, 90, 0));
                 hexes[$"{q},{r}"] = hexObj;
-                
+                occupiedHexes[$"{q},{r}"] = false; // Initialize as unoccupied
+
                 // Apply scaling using localScale (matches reference code)
                 hexObj.transform.localScale = new Vector3(hexSize, hexSize, hexSize);
-                
+
                 // Add HexPos component and set coordinates
                 HexPos pos = hexObj.GetComponent<HexPos>();
                 if (pos == null)
@@ -120,7 +127,7 @@ public class GridManager : MonoBehaviour
                 }
                 pos.q = q;
                 pos.r = r;
-                
+
                 // Position hex using HexPos.position property (matches reference code)
                 hexObj.transform.position = pos.position;
                 hexObj.name = $"Hex_{q},{r}";
@@ -130,5 +137,20 @@ public class GridManager : MonoBehaviour
                 anim.SetBool("Flipped", false);
             }
         }
+    }
+
+    public void LeaveHex(int q, int r)
+    {
+        occupiedHexes[$"{q},{r}"] = false;
+    }
+
+    public void EnterHex(int q, int r)
+    {
+        occupiedHexes[$"{q},{r}"] = true;
+    }
+
+    public bool IsHexAvailable(int q, int r)
+    {
+        return !occupiedHexes.ContainsKey($"{q},{r}") || !occupiedHexes[$"{q},{r}"];
     }
 }

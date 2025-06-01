@@ -8,6 +8,8 @@ using UE = UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public GameObject gridManagerObject;
+    private GridManager gridManager;
     public GameObject player;
     public int enemyCount = 5;
     private List<EnemyMovement> enemies = new List<EnemyMovement>();
@@ -15,8 +17,9 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
-        SpawnEnemies();
         playerHex = player.GetComponent<HexPos>();
+        gridManager = gridManagerObject.GetComponent<GridManager>();
+        SpawnEnemies();
     }
 
     public void Move()
@@ -36,9 +39,15 @@ public class EnemyManager : MonoBehaviour
             int q = UE.Random.Range(-5, 5);
             int magnitude = 5 - Math.Abs(q);
             int r = UE.Random.Range(-magnitude, magnitude);
+    
             hexPos.SetPos(q, r);
+            gridManager.EnterHex(q, r);
+
             enemyObj.transform.position = hexPos.position;
-            enemies.Add(enemyObj.GetComponent<EnemyMovement>());
+
+            EnemyMovement enemy = enemyObj.GetComponent<EnemyMovement>();
+            enemy.gridManager = gridManager;
+            enemies.Add(enemy);
         }
     }
 }

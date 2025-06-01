@@ -828,6 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 8380562112768433761, guid: 1b76df51a030f504e860cce0ff93c8ea, type: 3}
+  gridManagerObject: {fileID: 990597255}
   player: {fileID: 1287356365}
   enemyCount: 5
 --- !u!4 &1099703380
@@ -1055,6 +1056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58768fe45c2fb6347a56abb984e891e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridManagerObject: {fileID: 990597255}
 --- !u!1 &1493308786
 GameObject:
   m_ObjectHideFlags: 0

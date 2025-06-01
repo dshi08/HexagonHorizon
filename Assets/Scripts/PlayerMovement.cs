@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject gridManagerObject;
+    private GridManager gridManager;
     private HexPos currentHex;
 
     // Start is called before the first frame update
     void Start()
     {
         currentHex = GetComponent<HexPos>();
+        gridManager = gridManagerObject.GetComponent<GridManager>();
+        gridManager.EnterHex(currentHex.q, currentHex.r);
     }
 
     public void MoveToPos(int q, int r)
     {
+        gridManager.LeaveHex(currentHex.q, currentHex.r);
+        gridManager.EnterHex(q, r);
         currentHex.SetPos(q, r);
         Vector3 newPosition = currentHex.position;
 

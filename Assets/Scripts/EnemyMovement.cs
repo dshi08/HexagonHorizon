@@ -3,6 +3,7 @@ using System.Collections;
 
 public class EnemyMovement : MonoBehaviour
 {
+    public GridManager gridManager; 
     private HexPos hexPos;
     public float moveDuration = 0.5f; // Match player's movement speed
     public float arcHeight = 0.3f;    // Slightly lower arc than player for visual distinction
@@ -15,6 +16,8 @@ public class EnemyMovement : MonoBehaviour
     // Public method to move enemy to axial coordinates (q, r)
     public void MoveToHex(int q, int r)
     {
+        gridManager.LeaveHex(hexPos.q, hexPos.r);
+        gridManager.EnterHex(q, r);
         hexPos.SetPos(q, r);
         StartCoroutine(MoveToPosition(hexPos.position));
     }
@@ -47,7 +50,7 @@ public class EnemyMovement : MonoBehaviour
         foreach (Vector2Int neighbor in neighbors)
         {
             int dist = HexDistance(neighbor, playerHex.GetPos());
-            if (dist < minDistance)
+            if (dist < minDistance && gridManager.IsHexAvailable(neighbor.x, neighbor.y))
             {
                 minDistance = dist;
                 bestMove = neighbor;
