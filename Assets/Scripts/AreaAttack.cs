@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class AreaAttack : AttackBase
 {
-    public override List<Vector2> GetHitTiles(Vector2 origin, Vector2 target)
+    public override List<Vector2> HitTiles(Vector2 origin, Vector2 target)
     {
         return new List<Vector2>
         {

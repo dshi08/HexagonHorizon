@@ -39,7 +39,6 @@ public class GridManager : MonoBehaviour
 
                 if (hex != null)
                 {
-                    // if (!IsHexAvailable(hex.q, hex.r)) return;
                     HandleMove(hex);
                 }
                 else
@@ -52,10 +51,22 @@ public class GridManager : MonoBehaviour
 
     void HandleMove(HexPos hex)
     {
-        attackManager.Attack(playerMovement.currentHex.GetPos(), hex.GetPos(), 0);
-        playerMovement.MoveToPos(hex.q, hex.r);
+        if (IsHexAvailable(hex.q, hex.r))
+        {
+            playerMovement.MoveToPos(hex.q, hex.r);
+            Reveal(hex.q, hex.r, 1);
+        }
+        else
+        {
+            attackManager.Attack(playerMovement.currentHex.GetPos(), hex.GetPos(), 1);
+        }
+
+        Invoke("MoveEnemies", 0.5f); // Delay enemy movement to allow player action to complete
+    }
+
+    void MoveEnemies()
+    {
         enemyManager.Move();
-        Reveal(hex.q, hex.r, 1);
     }
 
     void Reveal(int centerQ, int centerR, int radius)

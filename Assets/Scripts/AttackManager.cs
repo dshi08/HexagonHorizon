@@ -17,7 +17,7 @@ public class AttackManager : MonoBehaviour
 	public void Attack(Vector2 origin, Vector2 target, int attackIndex)
     {
         AttackBase attack = attacks[attackIndex];
-        List<Vector2> hitTiles = attack.GetHitTiles(origin, target);
+        List<Vector2> hitTiles = attack.HitTiles(origin, target);
 
         foreach (Vector2 tile in hitTiles)
         {

@@ -46,4 +46,12 @@ public class HexPos : MonoBehaviour
         float y = Mathf.Sqrt(3) * (r + q / 2f);
         return new Vector3(x, 0, y);
     }
+
+    public static Vector3 AxialToPositionStatic(int q, int r)
+    {
+        // This matches the reference code exactly for consistent spacing
+        float x = 3f / 2f * q;
+        float y = Mathf.Sqrt(3) * (r + q / 2f);
+        return new Vector3(x, 0, y);
+    }
 }

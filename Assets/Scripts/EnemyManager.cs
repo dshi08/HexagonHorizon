@@ -14,6 +14,7 @@ public class EnemyManager : MonoBehaviour
     public int enemyCount = 5;
     private List<EnemyMovement> enemies = new List<EnemyMovement>();
     private HexPos playerHex;
+    private List<EnemyMovement> toDestroy = new List<EnemyMovement>();
 
     void Start()
     {
@@ -53,7 +54,7 @@ public class EnemyManager : MonoBehaviour
 
     public void DamageEnemy(Vector2 hex, int damage)
     {
-        for(int i = 0; i < enemies.Count; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
             EnemyMovement enemy = enemies[i];
             if (enemy.hexPos.GetPos() == hex)
@@ -61,12 +62,22 @@ public class EnemyManager : MonoBehaviour
                 enemy.health -= damage;
                 if (enemy.health <= 0)
                 {
-                    gridManager.LeaveHex(enemy.hexPos.q, enemy.hexPos.r);
-                    enemies.RemoveAt(i);
-                    Destroy(enemy.gameObject);
+                    toDestroy.Add(enemy);
+                    Invoke("DestroyEnemies", 0.5f);
                 }
                 return;
             }
         }
+    }
+
+    void DestroyEnemies()
+    {
+        foreach (EnemyMovement enemy in toDestroy)
+        {
+            enemies.Remove(enemy);
+            gridManager.LeaveHex(enemy.hexPos.q, enemy.hexPos.r);
+            Destroy(enemy.gameObject);
+        }
+        toDestroy.Clear();
     }
 }
