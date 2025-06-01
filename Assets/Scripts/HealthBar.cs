@@ -31,6 +31,6 @@ public class Health : MonoBehaviour
 
     void UpdateHealthBar()
     {
-        slider.value = currentHealth;
+        slider.value = currentHealth / maxHealth;
     }
 }
