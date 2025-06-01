@@ -10,6 +10,10 @@ public class HexPos : MonoBehaviour
     {
         get => AxialToPosition(q, r);
     }
+    public Vector2Int GetPos()
+    {
+        return new Vector2Int(q, r);
+    }
 
     public void SetPos(int q, int r)
     {
