@@ -297,8 +297,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3afbb078b01cf4a3a977bb1516123ffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyManagerObject: {fileID: 1099703378}
   attacks:
   - {fileID: 550634709}
+  - {fileID: 550634713}
+  - {fileID: 550634712}
 --- !u!114 &550634711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +316,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManagerObject: {fileID: 990597255}
   currentHex: {fileID: 550634708}
+--- !u!114 &550634712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550634706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9d6bf611ea9be48b39ad348105381d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &550634713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550634706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ffe58ceeb70924c83c828afcc103a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &631393239
 GameObject:
   m_ObjectHideFlags: 0
@@ -1305,6 +1332,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 428f4d7fe236c47998b51b5f4b8ee185, type: 3}
       insertIndex: -1
       addedObject: {fileID: 550634708}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 428f4d7fe236c47998b51b5f4b8ee185, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 550634713}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 428f4d7fe236c47998b51b5f4b8ee185, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 550634712}
   m_SourcePrefab: {fileID: 100100000, guid: 428f4d7fe236c47998b51b5f4b8ee185, type: 3}
 --- !u!1 &1698745247
 GameObject:

@@ -3,8 +3,9 @@ using System.Collections;
 
 public class EnemyMovement : MonoBehaviour
 {
+    public int health = 10;
     public GridManager gridManager; 
-    private HexPos hexPos;
+    public HexPos hexPos;
     public float moveDuration = 0.5f; // Match player's movement speed
     public float arcHeight = 0.3f;    // Slightly lower arc than player for visual distinction
 
