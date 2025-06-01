@@ -57,6 +57,10 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
+        bool canSee = minDistance <= 1;
+        // set visibility
+        GetComponent<MeshRenderer>().enabled = canSee;
+
         MoveToHex(bestMove.x, bestMove.y);
     }
 
