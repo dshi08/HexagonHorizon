@@ -21,6 +21,8 @@ public class EnemyMovement : MonoBehaviour
         gridManager.EnterHex(q, r);
         Vector3 startPos = hexPos.position;
         hexPos.SetPos(q, r);
+
+        if (!gameObject.activeSelf) return;
         StartCoroutine(MoveToPosition(startPos, hexPos.position));
     }
 
