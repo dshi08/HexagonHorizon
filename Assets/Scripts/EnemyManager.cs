@@ -17,7 +17,7 @@ public class EnemyManager : MonoBehaviour
     private List<EnemyMovement> enemies = new List<EnemyMovement>();
     private HexPos playerHex;
     private List<EnemyMovement> toDestroy = new List<EnemyMovement>();
-
+    private PlayerXP playerXP;
     void Start()
     {
         playerHex = player.GetComponent<HexPos>();
@@ -74,6 +74,26 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    public void EnemyKilled(EnemyMovement deadEnemy)
+    {
+        Debug.Log($"Enemy {deadEnemy.gameObject.name} has been defeated!");
+
+        // Grant XP to the player
+        if (playerXP != null)
+        {
+            playerXP.GainXP(deadEnemy.xpValue); // Uses the xpValue from the EnemyMovement script
+        }
+        else
+        {
+            Debug.LogWarning("PlayerXP reference is null when trying to grant XP.");
+        }
+        // Remove the enemy from the active list
+        enemies.Remove(deadEnemy);
+        // Free up the hex on the grid
+        gridManager.LeaveHex(deadEnemy.hexPos.q, deadEnemy.hexPos.r);
+        // Destroy the GameObject
+        Destroy(deadEnemy.gameObject);
+    }
     void DestroyEnemies()
     {
         foreach (EnemyMovement enemy in toDestroy)

@@ -4,13 +4,14 @@ using System.Collections;
 public class EnemyMovement : MonoBehaviour
 {
     public int health = 10;
+    public int xpValue = 25;
     public GridManager gridManager; 
     public HexPos hexPos;
     public float moveDuration = 0.5f; // Match player's movement speed
     public float arcHeight = 0.3f;    // Slightly lower arc than player for visual distinction
     public Health playerHealth;
-
-    void Start()
+    public EnemyManager enemyManager;
+    void Awake()
     {
         hexPos = GetComponent<HexPos>();
     }
